@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SignBridge</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eaf2ef;--card:#fff;--text:#10211c;--mut:#5d6f69;--ac:#0e7c66;--act:#fff;--bd:#d3dfdb;--bh:#e5ecea;--bm:#cdeee5;--skin:#e2b48f;--ac2:#7c5cff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1311;--card:#15201d;--text:#e9f2ef;--mut:#9ab0a9;--ac:#34d1ad;--act:#04201a;--bd:#263631;--bh:#212e2a;--bm:#17493d;--skin:#c9997a}}
+:root[data-theme="dark"]{--bg:#0b1311;--card:#15201d;--text:#e9f2ef;--mut:#9ab0a9;--ac:#34d1ad;--act:#04201a;--bd:#263631;--bh:#212e2a;--bm:#17493d;--skin:#c9997a}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+#app{height:100%;max-width:480px;margin:0 auto;position:relative;background:var(--bg);display:flex;flex-direction:column}
+button{font:inherit;color:inherit;border:1px solid var(--bd);background:var(--card);border-radius:12px;padding:10px 12px;cursor:pointer}
+button.p{background:var(--ac);color:var(--act);border-color:var(--ac);font-weight:600}
+#onb{position:absolute;inset:0;z-index:5;background:linear-gradient(160deg,#064e3f,#0e7c66 55%,#5b3fd1);color:#fff;padding:28px 22px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+#onb h1{font-size:38px;margin:0;letter-spacing:-.02em}#onb p{margin:0;opacity:.9}
+.logo{font-size:64px;animation:fl 2.4s ease-in-out infinite alternate}@keyframes fl{to{transform:translateY(-8px) rotate(8deg)}}
+.opt{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);color:#fff;text-align:left;padding:16px;border-radius:16px}
+.opt b{display:block;font-size:17px}.opt span{opacity:.85;font-size:13px}
+header{display:flex;align-items:center;gap:8px;padding:10px 14px}
+header h1{font-size:18px;margin:0;flex:1}
+.pill{border-radius:99px;padding:6px 12px;font-size:13px}
+main{flex:1;overflow-y:auto;padding:0 14px 12px}
+.tab{display:none}.tab.on{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px;margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em}
+.hand{width:150px;height:170px;margin:0 auto}.hand svg{width:100%;height:100%}
+.hand .fg{stroke:var(--skin);stroke-width:17;stroke-linecap:round}.hand .pm{fill:var(--skin)}.hand .cuff{fill:var(--ac)}
+.stage{text-align:center}.stat{color:var(--mut);font-size:13px;min-height:20px}
+.cap{font-size:24px;font-weight:800;letter-spacing:.03em;min-height:32px;margin-top:2px}
+#log{display:flex;flex-direction:column;gap:6px;max-height:210px;overflow-y:auto}
+.b{padding:8px 12px;border-radius:14px;max-width:84%}.b small{display:block;font-size:11px;color:var(--mut)}
+.h{background:var(--bh);align-self:flex-start}.d{background:var(--bm);align-self:flex-end}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.chips button{padding:6px 10px;font-size:13px;border-radius:99px}
+.row{display:flex;gap:6px}.row input{flex:1;min-width:0;font:inherit;padding:10px;border-radius:12px;border:1px solid var(--bd);background:var(--bg);color:var(--text)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.bar{height:8px;border-radius:9px;background:var(--bh);overflow:hidden}.bar i{display:block;height:100%;background:var(--ac);width:0;transition:width .1s}
+.sens{display:grid;grid-template-columns:54px 1fr 44px;gap:6px 8px;align-items:center;font-size:12px;color:var(--mut)}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:8px}.kpi div{background:var(--bg);border-radius:12px;padding:10px}.kpi b{display:block;font-size:26px;color:var(--ac)}
+.kpi span{font-size:12px;color:var(--mut)}
+.v{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)}.v:last-child{border:0}
+.dots{display:flex;gap:3px}.dots i{width:8px;height:18px;border-radius:5px;background:var(--bd)}.dots i.c{background:var(--ac);height:8px;margin-top:10px}
+.tl li{margin:4px 0}ul{padding-left:18px;margin:0}
+nav{display:flex;border-top:1px solid var(--bd);background:var(--card)}
+nav button{flex:1;border:0;border-radius:0;background:none;font-size:12px;padding:8px 4px;color:var(--mut)}nav button.on{color:var(--ac);font-weight:700}nav b{display:block;font-size:20px}
+.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:#e5484d;margin-right:6px;animation:bl 1s infinite}@keyframes bl{50%{opacity:.2}}
+</style>
+</head>
+<body>
+<div id="app">
+<section id="onb">
+ <div class="logo">🤟</div><h1>SignBridge</h1>
+ <p>A glove and an app that let Deaf and hearing people talk to each other, with no interpreter needed.</p>
+ <p style="margin-top:8px"><b>How do you prefer to receive messages?</b></p>
+ <button class="opt" data-m="read"><b>📖 I can read</b><span>Speech appears as text on screen</span></button>
+ <button class="opt" data-m="sign"><b>🤟 Sign language</b><span>An animated avatar signs every message</span></button>
+</section>
+
+<header><span style="font-size:24px">🤟</span><h1>SignBridge</h1><button id="mode" class="pill"></button><button id="demo" class="pill p">▶ Live demo</button></header>
+<main>
+<div class="tab on" id="t-talk">
+ <div class="card stage"><div class="hand" id="h1"></div><div class="stat" id="st">Ready</div><div class="cap" id="cap"></div></div>
+ <div class="card"><h2>Conversation</h2><div id="log"></div></div>
+ <div class="card"><h2>Hearing person</h2>
+  <div class="chips" id="chips"></div>
+  <div class="row"><button id="mic" class="p">🎤</button><input id="typed" placeholder="Speak or type a message…"><button id="send">Send</button></div>
+  <div class="stat" id="hint"></div></div>
+</div>
+
+<div class="tab" id="t-glove">
+ <div class="card"><h2>Smart glove · simulated for this demo</h2>
+  <div class="row" style="align-items:center"><div id="conn" style="flex:1"><b>Not connected</b><div class="stat">ESP32 · Bluetooth LE</div></div><button id="pair" class="p">Pair glove</button></div></div>
+ <div id="gbody" hidden>
+  <div class="card stage"><div class="hand" id="h2"></div>
+   <div class="bar" style="margin:8px 0"><i id="prog"></i></div><div class="stat" id="gst">Choose a sign to perform</div></div>
+  <div class="card"><h2>Live sensors</h2><div class="sens" id="sens"></div></div>
+  <div class="card"><h2>Perform a sign</h2><div class="grid" id="perf"></div></div>
+ </div>
+</div>
+
+<div class="tab" id="t-vocab"><div class="card"><h2>Nigerian Sign Language vocabulary · starter set</h2><div id="vl"></div>
+ <div class="stat" style="margin-top:8px">Placeholder poses. Every sign will be validated with NSL users.</div></div></div>
+
+<div class="tab" id="t-stats">
+ <div class="card"><h2>Session metrics · simulated glove</h2><div class="kpi">
+  <div><b id="k1">–</b><span>Recognition accuracy</span></div><div><b id="k2">–</b><span>Avg. response time</span></div>
+  <div><b id="k3">0</b><span>Signs recognised</span></div><div><b id="k4">0</b><span>Messages</span></div></div></div>
+ <div class="card"><h2>Signs by phrase</h2><div id="chart"></div></div>
+ <div class="card"><h2>Phase One progress</h2><ul class="tl">
+  <li>✅ Two-way conversation flow (speech ↔ sign)</li><li>✅ Text mode and Sign mode preferences</li>
+  <li>✅ Gesture recognition prototype (5 flex sensors)</li><li>✅ Sign-to-speech output</li><li>✅ Animated sign avatar (prototype)</li>
+  <li>🔧 ESP32 glove hardware build</li><li>🔧 Validated NSL vocabulary and real animations</li><li>🔧 Testing with Deaf NSL users</li></ul></div>
+</div>
+</main>
+<nav id="nav"><button data-t="talk" class="on"><b>💬</b>Talk</button><button data-t="glove"><b>🧤</b>Glove</button><button data-t="vocab"><b>📖</b>Signs</button><button data-t="stats"><b>📊</b>Insights</button></nav>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],sleep=ms=>new Promise(r=>setTimeout(r,ms)),cl=x=>Math.max(0,Math.min(1,x));
+const REST=[.12,.2,.25,.3,.35];
+const P=[
+{id:'hello',t:'Hello',k:['hello','hi ','good morning'],p:[0,0,0,0,0],w:1},
+{id:'how',t:'How are you?',k:['how are you'],p:[0,1,1,1,1]},
+{id:'fine',t:'I am fine',k:['i am fine','i’m fine','i am good'],p:[1,0,0,1,1]},
+{id:'thanks',t:'Thank you',k:['thank'],p:[.5,.5,.5,.5,.5]},
+{id:'yes',t:'Yes',k:['yes','okay'],p:[1,1,1,1,1]},
+{id:'no',t:'No',k:['no ','not '],p:[1,0,1,1,1]},
+{id:'please',t:'Please',k:['please'],p:[0,0,1,1,1]},
+{id:'help',t:'I need help',k:['help'],p:[0,0,0,1,1],w:1},
+{id:'water',t:'I want water',k:['water','thirsty'],p:[1,0,0,0,1]},
+{id:'sorry',t:'Sorry',k:['sorry'],p:[1,1,1,1,0]}];
+const byId=id=>P.find(p=>p.id===id);
+
+/* ---- animated hand ---- */
+const B=[[48,150,-38,52],[70,118,-4,72],[92,112,0,80],[114,116,4,72],[134,126,9,56]];
+const hands=[];
+function Hand(el){
+ el.innerHTML='<svg viewBox="0 0 200 230"><g class="w"><rect class="pm" x="40" y="112" width="106" height="92" rx="34"/>'+B.map(()=>'<line class="fg"/>').join('')+'<rect class="cuff" x="52" y="198" width="82" height="26" rx="8"/></g></svg>';
+ const h={cur:REST.slice(),tgt:REST.slice(),wave:0,g:el.querySelector('.w'),ls:[...el.querySelectorAll('.fg')]};hands.push(h);return h;}
+function tick(t){hands.forEach(h=>{for(let i=0;i<5;i++)h.cur[i]+=(h.tgt[i]-h.cur[i])*.18;
+ h.ls.forEach((l,i)=>{const[x,y,a,len]=B[i],c=h.cur[i],L=len*(1-.62*c),r=(a+(i?0:c*62))*Math.PI/180;
+  l.setAttribute('x1',x);l.setAttribute('y1',y);l.setAttribute('x2',x+Math.sin(r)*L);l.setAttribute('y2',y-Math.cos(r)*L);});
+ h.g.setAttribute('transform','rotate('+(h.wave?14*Math.sin(t/140):0)+' 93 205)');});requestAnimationFrame(tick);}
+const th=Hand($('#h1')),gh=Hand($('#h2'));requestAnimationFrame(tick);
+
+/* ---- state ---- */
+let signMode=false,connected=false,busy=false,stopDemo=true;const stats=[],counts={};let msgs=0;
+function setMode(s){signMode=s;$('#mode').textContent=s?'🤟 Sign mode':'📖 Text mode';if(!s)th.tgt=REST.slice();}
+$('#mode').onclick=()=>{setMode(!signMode);$('#cap').textContent='';};
+$$('.opt').forEach(b=>b.onclick=()=>{setMode(b.dataset.m==='sign');$('#onb').style.display='none';});
+$$('#nav button').forEach(b=>b.onclick=()=>{$$('#nav button').forEach(x=>x.classList.toggle('on',x===b));$$('.tab').forEach(t=>t.classList.toggle('on',t.id==='t-'+b.dataset.t));if(b.dataset.t==='stats')renderStats();});
+const goTab=t=>$('#nav [data-t='+t+']').click();
+
+function addMsg(text,deaf){msgs++;const d=document.createElement('div');d.className='b '+(deaf?'d':'h');d.innerHTML='<small>'+(deaf?'🧤 Glove':'🎤 Voice')+'</small>';d.append(text);$('#log').append(d);$('#log').scrollTop=1e6;}
+function speak(t){try{speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t));}catch(e){}}
+
+/* ---- hearing -> deaf ---- */
+async function heard(text){text=text.trim();if(!text)return;addMsg(text,false);
+ const q=' '+text.toLowerCase()+' ',m=P.find(p=>p.k.some(k=>q.includes(k)));
+ if(!signMode){$('#cap').textContent='“'+text+'”';$('#st').textContent='💬 Shown as text for the Deaf user';return;}
+ if(!m){$('#cap').textContent='';$('#st').textContent='No sign in the library yet for this phrase';return;}
+ $('#st').textContent='🧑‍🦽 Avatar signing…';$('#cap').textContent=m.t.toUpperCase();th.tgt=m.p.slice();th.wave=!!m.w;
+ await sleep(2400);th.tgt=REST.slice();th.wave=0;$('#st').textContent='Ready';}
+$('#send').onclick=()=>{heard($('#typed').value);$('#typed').value='';};
+$('#typed').onkeydown=e=>{if(e.key==='Enter')$('#send').click();};
+['Hello, good morning','How are you?','Do you need help?','Would you like some water?'].forEach(s=>{const b=document.createElement('button');b.textContent=s;b.onclick=()=>heard(s);$('#chips').append(b);});
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!SR){$('#mic').disabled=true;$('#hint').textContent='Mic not supported here. Tap a suggestion or type instead.';}
+else $('#mic').onclick=()=>{try{const r=new SR();r.lang='en-US';r.onstart=()=>$('#hint').textContent='Listening…';
+ r.onresult=e=>{heard(e.results[0][0].transcript);$('#hint').textContent='';};r.onerror=()=>$('#hint').textContent='Mic blocked here. Tap a suggestion or type instead.';r.start();}catch(e){$('#hint').textContent='Mic unavailable. Type instead.';}};
+
+/* ---- deaf -> hearing (simulated glove + real nearest-neighbour classifier) ---- */
+function classify(v){let b=null,d=9;P.forEach(p=>{const x=Math.hypot(...p.p.map((q,i)=>q-v[i]));if(x<d){d=x;b=p;}});return[b,d];}
+const sens=['Thumb','Index','Middle','Ring','Pinky','Accel X','Accel Y','Accel Z'];
+$('#sens').innerHTML=sens.map((s,i)=>'<span>'+s+'</span><div class="bar"><i id="s'+i+'"></i></div><span id="n'+i+'">0</span>').join('');
+setInterval(()=>{if(!connected)return;gh.cur.forEach((c,i)=>{$('#s'+i).style.width=(c*100)+'%';$('#n'+i).textContent=Math.round(1200+c*1600+Math.random()*14);});
+ [5,6,7].forEach(i=>{const v=.5+(Math.random()-.5)*(gh.wave?.9:.12);$('#s'+i).style.width=v*100+'%';$('#n'+i).textContent=((v-.5)*4).toFixed(2)+'g';});},100);
+$('#pair').onclick=async()=>{const c=$('#conn');$('#pair').disabled=true;c.innerHTML='<b>Scanning…</b><div class="stat">Looking for SignBridge-G1</div>';await sleep(1100);
+ c.innerHTML='<b>Pairing…</b><div class="stat">Exchanging keys</div>';await sleep(900);connected=true;
+ c.innerHTML='<b><span class="live" style="background:var(--ac)"></span>SignBridge-G1 connected</b><div class="stat">Battery 87% · Signal −52 dBm · 20 Hz stream</div>';$('#pair').style.display='none';$('#gbody').hidden=false;};
+async function perform(p){if(busy)return;if(!connected){goTab('glove');return;}busy=true;const t0=performance.now();
+ th.tgt=gh.tgt=p.p.slice();th.wave=gh.wave=!!p.w;$('#gst').textContent='Reading sensors…';$('#st').textContent='🧤 Glove detecting sign…';$('#cap').textContent='';
+ let cand=null,n=0,d=0,tries=0;
+ while(n<10&&tries++<70){await sleep(50);const[b,x]=classify(gh.cur.map(v=>cl(v+(Math.random()-.5)*.08)));d=x;const ok=x<.45?b:null;
+  if(ok&&ok===cand)n++;else{cand=ok;n=ok?1:0;}$('#prog').style.width=n*10+'%';}
+ const ms=Math.round(performance.now()-t0),conf=Math.round(100*cl(1-d/.6));
+ if(cand){stats.push({ok:cand.id===p.id,ms,conf});counts[cand.id]=(counts[cand.id]||0)+1;
+  addMsg(cand.t,true);speak(cand.t);$('#gst').textContent='✅ '+cand.t+' · '+conf+'% confidence · '+ms+' ms';$('#st').textContent='🔊 Spoken aloud for the hearing person';$('#cap').textContent=cand.t.toUpperCase();}
+ else $('#gst').textContent='Sign not recognised, try again';
+ await sleep(1300);th.tgt=gh.tgt=REST.slice();th.wave=gh.wave=0;$('#prog').style.width=0;busy=false;}
+P.forEach(p=>{const b=document.createElement('button');b.textContent=p.t;b.onclick=()=>perform(p);$('#perf').append(b);
+ const v=document.createElement('div');v.className='v';v.innerHTML='<div class="dots">'+p.p.map(c=>'<i class="'+(c>.6?'c':'')+'"></i>').join('')+'</div><b style="flex:1">'+p.t+'</b>';
+ const pv=document.createElement('button');pv.textContent='Preview';pv.onclick=async()=>{goTab('talk');setMode(true);$('#st').textContent='🧑‍🦽 Avatar signing…';$('#cap').textContent=p.t.toUpperCase();th.tgt=p.p.slice();th.wave=!!p.w;await sleep(2400);th.tgt=REST.slice();th.wave=0;$('#st').textContent='Ready';};v.append(pv);$('#vl').append(v);});
+
+/* ---- insights ---- */
+function renderStats(){const n=stats.length;$('#k1').textContent=n?Math.round(100*stats.filter(s=>s.ok).length/n)+'%':'–';
+ $('#k2').textContent=n?Math.round(stats.reduce((a,s)=>a+s.ms,0)/n)+' ms':'–';$('#k3').textContent=n;$('#k4').textContent=msgs;
+ const mx=Math.max(1,...Object.values(counts));$('#chart').innerHTML=Object.keys(counts).length?P.filter(p=>counts[p.id]).map(p=>'<div style="display:grid;grid-template-columns:96px 1fr 20px;gap:8px;align-items:center;margin:5px 0;font-size:13px"><span>'+p.t+'</span><div class="bar"><i style="width:'+counts[p.id]/mx*100+'%"></i></div><span>'+counts[p.id]+'</span></div>').join(''):'<div class="stat">Perform signs on the Glove tab to see results.</div>';}
+
+/* ---- scripted demo ---- */
+$('#demo').onclick=async()=>{if(!stopDemo){stopDemo=true;$('#demo').textContent='▶ Live demo';return;}
+ stopDemo=false;$('#demo').textContent='■ Stop';goTab('talk');
+ if(!connected){goTab('glove');$('#pair').click();await sleep(2300);goTab('talk');}
+ const S=[['h','Hello, good morning'],['d','hello'],['h','How are you?'],['d','fine'],['h','Do you need help?'],['d','help'],['h','Would you like some water?'],['d','water'],['d','thanks']];
+ for(const[w,x]of S){if(stopDemo)break;if(w==='h'){await heard(x);}else{while(busy)await sleep(100);await perform(byId(x));}await sleep(500);}
+ stopDemo=true;$('#demo').textContent='▶ Live demo';};
+setMode(false);
+</script>
+</body>
+</html>
